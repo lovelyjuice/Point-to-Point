@@ -1,4 +1,4 @@
-// ConsoleApplication2.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+// ConsoleApplication2.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 
 #include "stdafx.h"
@@ -11,34 +11,34 @@
 int visited[MAXV];
 typedef struct
 {
-	int no;				//¶¥µã±àºÅ
-	InfoType info;			//¶¥µãÆäËûĞÅÏ¢
-} VertexType;			//¶¥µãÀàĞÍ
-typedef struct  			//Í¼µÄ¶¨Òå
+	int no;				//é¡¶ç‚¹ç¼–å·
+	InfoType info;			//é¡¶ç‚¹å…¶ä»–ä¿¡æ¯
+} VertexType;			//é¡¶ç‚¹ç±»å‹
+typedef struct  			//å›¾çš„å®šä¹‰
 {
-	int edges[MAXV][MAXV]; 	//ÁÚ½Ó¾ØÕó
-	int n, e;  			//¶¥µãÊı,»¡Êı
-	VertexType vexs[MAXV];	//´æ·Å¶¥µãĞÅÏ¢
+	int edges[MAXV][MAXV]; 	//é‚»æ¥çŸ©é˜µ
+	int n, e;  			//é¡¶ç‚¹æ•°,å¼§æ•°
+	VertexType vexs[MAXV];	//å­˜æ”¾é¡¶ç‚¹ä¿¡æ¯
 } MGraph;
 
 
 typedef struct ANode
 {
-	int adjvex;			//¸Ã±ßµÄÖÕµã±àºÅ
-	struct ANode *nextarc;	//Ö¸ÏòÏÂÒ»Ìõ±ßµÄÖ¸Õë
-	InfoType info;			//¸Ã±ßµÄÏà¹ØĞÅÏ¢
-} ArcNode;				//±ß±í½ÚµãÀàĞÍ
+	int adjvex;			//è¯¥è¾¹çš„ç»ˆç‚¹ç¼–å·
+	struct ANode *nextarc;	//æŒ‡å‘ä¸‹ä¸€æ¡è¾¹çš„æŒ‡é’ˆ
+	InfoType info;			//è¯¥è¾¹çš„ç›¸å…³ä¿¡æ¯
+} ArcNode;				//è¾¹è¡¨èŠ‚ç‚¹ç±»å‹
 typedef struct Vnode
 {
-	Vertex data;			//¶¥µãĞÅÏ¢
-	ArcNode *firstarc;		//Ö¸ÏòµÚÒ»Ìõ±ß
-} VNode;				//ÁÚ½Ó±íÍ·½ÚµãÀàĞÍ
-typedef VNode AdjList[MAXV];	//AdjListÊÇÁÚ½Ó±íÀàĞÍ
+	Vertex data;			//é¡¶ç‚¹ä¿¡æ¯
+	ArcNode *firstarc;		//æŒ‡å‘ç¬¬ä¸€æ¡è¾¹
+} VNode;				//é‚»æ¥è¡¨å¤´èŠ‚ç‚¹ç±»å‹
+typedef VNode AdjList[MAXV];	//AdjListæ˜¯é‚»æ¥è¡¨ç±»å‹
 typedef struct
 {
-	AdjList adjlist;		//ÁÚ½Ó±í
-	int n, e;				//Í¼ÖĞ¶¥µãÊınºÍ±ßÊıe
-} ALGraph;				//ÍêÕûµÄÍ¼ÁÚ½Ó±íÀàĞÍ
+	AdjList adjlist;		//é‚»æ¥è¡¨
+	int n, e;				//å›¾ä¸­é¡¶ç‚¹æ•°nå’Œè¾¹æ•°e
+} ALGraph;				//å®Œæ•´çš„å›¾é‚»æ¥è¡¨ç±»å‹
 
 typedef struct
 {
@@ -69,20 +69,11 @@ bool pop(SqStack *s)
 void path(SqStack *s, ALGraph *g, int start, int end, int length)
 {
 	push(s, start);
-	if (g->adjlist[start].firstarc!=NULL && g->adjlist[start].firstarc->adjvex == end)	   // endÎª±ßÔµ½Úµã
-	{
-		for (int i = 0; i < length; i++)
-		{
-			printf("%d ", s->data[i]);
-		}
-		printf("%d\n", end);
-	}
-	else
-	{
+
 		ArcNode *p = g->adjlist[start].firstarc;
 		while (p != NULL)
 		{
-			if (p->adjvex == end)  												 //startµÄÒ»¸öÏàÁÚ½ÚµãÎªend
+			if (p->adjvex == end)  												 //startçš„ä¸€ä¸ªç›¸é‚»èŠ‚ç‚¹ä¸ºend
 			{
 				for (int i = 0; i < length; i++)
 				{
@@ -97,28 +88,28 @@ void path(SqStack *s, ALGraph *g, int start, int end, int length)
 			p = p->nextarc;
 			
 		}
-	}
+	
 	visited[s->data[s->top]] = 0;
 	pop(s);
 	return;
 }
 
 void MatToList(MGraph g, ALGraph *&G)
-//½«ÁÚ½Ó¾ØÕóg×ª»»³ÉÁÚ½Ó±íG
+//å°†é‚»æ¥çŸ©é˜µgè½¬æ¢æˆé‚»æ¥è¡¨G
 {
-	int i, j, n = g.n; ArcNode *p; //nÎª¶¥µãÊı
+	int i, j, n = g.n; ArcNode *p; //nä¸ºé¡¶ç‚¹æ•°
 	G = (ALGraph *)malloc(sizeof(ALGraph));
-	for (i = 0; i < n; i++)     //¸øËùÓĞÍ·½ÚµãµÄÖ¸ÕëÓòÖÃ³õÖµ
+	for (i = 0; i < n; i++)     //ç»™æ‰€æœ‰å¤´èŠ‚ç‚¹çš„æŒ‡é’ˆåŸŸç½®åˆå€¼
 		G->adjlist[i].firstarc = NULL;
-	for (i = 0; i<n; i++)	 //¼ì²éÁÚ½Ó¾ØÕóÖĞÃ¿¸öÔªËØ
+	for (i = 0; i<n; i++)	 //æ£€æŸ¥é‚»æ¥çŸ©é˜µä¸­æ¯ä¸ªå…ƒç´ 
 		for (j = n - 1; j >= 0; j--)
 			if (g.edges[i][j] != 0)
 			{
 				p = (ArcNode *)malloc(sizeof(ArcNode));
-				//´´½¨½Úµã*p
+				//åˆ›å»ºèŠ‚ç‚¹*p
 				p->adjvex = j;
 				p->nextarc = G->adjlist[i].firstarc;
-				//½«*pÁ´µ½Á´±íÍ·
+				//å°†*pé“¾åˆ°é“¾è¡¨å¤´
 				G->adjlist[i].firstarc = p;
 			}
 	G->n = n; G->e = g.e;
@@ -129,7 +120,7 @@ int main()
 	ALGraph *G;
 	SqStack *s;
 	initStack(s);
-	printf("ÇëÊäÈëÁÚ½Ó¾ØÕó£º\n");
+	printf("è¯·è¾“å…¥é‚»æ¥çŸ©é˜µï¼š\n");
 	for (int i = 0; i < MAXV; i++)
 		for (int j = 0; j < MAXV; j++)scanf_s("%d", &g.edges[i][j]);
 	g.n = MAXV;
